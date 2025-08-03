@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("user")
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Movie {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  genre       String
+  duration    String
+  rating      Float
+  posterUrl   String
+  showtimes   Showtime[]
+}
+
+model Theater {
+  id        Int        @id @default(autoincrement())
+  name      String
+  location  String
+  showtimes Showtime[]
+}
+
+model Showtime {
+  id        Int       @id @default(autoincrement())
+  time      String
+  movieId   Int
+  theaterId Int
+  bookings  Booking[]
+  movie     Movie     @relation(fields: [movieId], references: [id])
+  theater   Theater   @relation(fields: [theaterId], references: [id])
+
+  @@index([movieId], map: "Showtime_movieId_fkey")
+  @@index([theaterId], map: "Showtime_theaterId_fkey")
+}
+
+model Booking {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  showtimeId Int
+  seats      String
+  createdAt  DateTime @default(now())
+  showtime   Showtime @relation(fields: [showtimeId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([showtimeId], map: "Booking_showtimeId_fkey")
+  @@index([userId], map: "Booking_userId_fkey")
+}

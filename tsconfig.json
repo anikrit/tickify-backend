@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // modern JS
+    "module": "CommonJS", // for Node.js
+    "rootDir": "./src", // where your source code is
+    "outDir": "./dist", // compiled output
+    "strict": true, // strict type-checking
+    "esModuleInterop": true, // allow default imports
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": ["node"], // allows `process`, etc.
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

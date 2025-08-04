@@ -30,7 +30,7 @@ model Movie {
 
 model Theater {
   id        Int        @id @default(autoincrement())
-  name      String
+  name      String     @unique
   location  String
   showtimes Showtime[]
 }
@@ -44,6 +44,7 @@ model Showtime {
   movie     Movie     @relation(fields: [movieId], references: [id])
   theater   Theater   @relation(fields: [theaterId], references: [id])
 
+  @@unique([movieId, theaterId, time])
   @@index([movieId], map: "Showtime_movieId_fkey")
   @@index([theaterId], map: "Showtime_theaterId_fkey")
 }

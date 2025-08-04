@@ -1,26 +1,25 @@
-import { PrismaClient } from "@prisma/client";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import express, { Request, Response } from "express";
+import express from "express";
+import authRoutes from "./routes/auth";
+import moviesRoutes from "./routes/movies";
 
 dotenv.config();
 
 const app = express();
-const prisma = new PrismaClient();
 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // allow frontend origin
+    credentials: true, // allow cookies
+  }),
+);
 app.use(express.json());
 
-// Test route
-app.get("/", (req, res) => {
-  res.send("Movie Booking API is running ✅");
-});
-
-// Movies route (initial test)
-app.get("/api/movies", async (req: Request, res: Response) => {
-  const movies = await prisma.movie.findMany();
-  res.json(movies);
-});
+app.use("/api/auth", authRoutes);
+app.use("/api/movies", moviesRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5050;
